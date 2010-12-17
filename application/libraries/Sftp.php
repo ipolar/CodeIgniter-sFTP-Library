@@ -14,6 +14,7 @@
 
 /**
 * SFTP class using PHPs ssh2 features.
+* This class utilises a fair bit from the CodeIgniter FTP class.
 *
 * @package     CodeIgniter
 * @subpackage  Libraries
@@ -29,8 +30,8 @@ class Sftp {
 	var $port		= 22;
 	var $debug		= FALSE;
 	var $conn_sftp	= FALSE;
-
-
+	
+	
 	/**
 	 * Constructor - Sets Preferences
 	 *
@@ -42,7 +43,7 @@ class Sftp {
 		{
 			$this->initialize($config);
 		}
-
+		
 		log_message('debug', "SFTP Class Initialized");
 	}
 
@@ -64,7 +65,7 @@ class Sftp {
 				$this->$key = $val;
 			}
 		}
-
+		
 		// Prep the hostname
 		$this->hostname = preg_replace('|.+?://|', '', $this->hostname);
 	}
@@ -108,7 +109,7 @@ class Sftp {
 			}
 			return FALSE;
 		}
-
+		
 		return TRUE;
 	}
 
@@ -159,7 +160,7 @@ class Sftp {
 	{		
 		$tempArray = array();
 		$handle = opendir($dir);
-
+		
 		// List all the files
 		while (false !== ($file = readdir($handle))) {
 			if (substr("$file", 0, 1) != "."){
@@ -191,9 +192,9 @@ class Sftp {
 		{
 			return FALSE;
 		}
-
+		
 		$result = @ssh2_sftp_mkdir($this->conn_sftp, $path);
-
+		
 		if ($result === FALSE)
 		{
 			if ($this->debug == TRUE)
@@ -202,7 +203,7 @@ class Sftp {
 			}
 			return FALSE;
 		}
-
+		
 		return TRUE;
 	}
 
@@ -223,7 +224,7 @@ class Sftp {
 		{
 			return FALSE;
 		}
-
+		
 		if ( ! file_exists($locpath))
 		{
 			if ($this->debug == TRUE)
@@ -232,12 +233,10 @@ class Sftp {
 			}
 			return FALSE;
 		}
-
 		
 		$sftp = $this->conn_sftp;
 		$stream = @fopen("ssh2.sftp://$sftp$rempath", 'w');
-
-
+		
 		if ($stream === FALSE)
 		{
 			if ($this->debug == TRUE)
@@ -246,7 +245,7 @@ class Sftp {
 			}
 			return FALSE;
 		}
-	
+		
 		$data_to_send = @file_get_contents($locpath);
 		
 		if (@fwrite($stream, $data_to_send) === false)
@@ -257,7 +256,7 @@ class Sftp {
 			}
 			return FALSE;
 		}
-			
+		
 		@fclose($stream);
 		
 		return TRUE;
@@ -280,11 +279,11 @@ class Sftp {
 		{
 			return FALSE;
 		}
-
+		
 		$sftp = $this->conn_sftp;
-				
+		
 		$stream = @fopen("ssh2.sftp://$sftp$rempath", 'r');
-
+		
 		if ($stream === FALSE)
 		{
 			if ($this->debug == TRUE)
@@ -293,7 +292,7 @@ class Sftp {
 			}
 			return FALSE;
 		}
-	
+		
 		$contents = @fread($stream, filesize("ssh2.sftp://$sftp$rempath"));
 		$result = file_put_contents($locpath, $contents);
 		@fclose($stream);
@@ -317,9 +316,9 @@ class Sftp {
 		{
 			return FALSE;
 		}
-
+		
 		$result = @ssh2_sftp_rename($this->conn_sftp, $old_file, $new_file);
-
+		
 		if ($result === FALSE)
 		{
 			if ($this->debug == TRUE)
@@ -328,7 +327,7 @@ class Sftp {
 			}
 			return FALSE;
 		}
-
+		
 		return TRUE;
 	}
 
@@ -347,10 +346,10 @@ class Sftp {
 		{
 			return FALSE;
 		}
-
+		
 		$sftp = $this->conn_sftp;
 		$result = unlink("ssh2.sftp://$sftp$filepath");
-
+		
 		if ($result === FALSE)
 		{
 			if ($this->debug == TRUE)
@@ -359,7 +358,7 @@ class Sftp {
 			}
 			return FALSE;
 		}
-
+		
 		return TRUE;
 	}
 
@@ -379,12 +378,12 @@ class Sftp {
 		{
 			return FALSE;
 		}
-
+		
 		// Add a trailing slash to the file path if needed
 		$filepath = preg_replace("/(.+?)\/*$/", "\\1/",  $filepath);
-
+		
 		$result = @ssh2_sftp_rmdir($this->conn_id, $filepath);
-
+		
 		if ($result === FALSE)
 		{
 			if ($this->debug == TRUE)
@@ -393,7 +392,7 @@ class Sftp {
 			}
 			return FALSE;
 		}
-
+		
 		return TRUE;
 	}
 
@@ -437,7 +436,6 @@ class Sftp {
 		$CI->lang->load('sftp');
 		show_error($CI->lang->line($line));
 	}
-
 
 }
 // END Sftp Class
