@@ -215,7 +215,6 @@ class Sftp {
 	 * @access	public
 	 * @param	string
 	 * @param	string
-	 * @param	string
 	 * @return	bool
 	 */
 	function upload($locpath, $rempath)
@@ -268,7 +267,6 @@ class Sftp {
 	 * Download a file to the server
 	 *
 	 * @access	public
-	 * @param	string
 	 * @param	string
 	 * @param	string
 	 * @return	bool
@@ -402,6 +400,8 @@ class Sftp {
 	 * FTP List files in the specified directory
 	 *
 	 * @access	public
+	 * @param	string
+	 * @param	bool
 	 * @return	array
 	 */
 	function list_files($path = '.', $recursive = FALSE)
@@ -419,6 +419,51 @@ class Sftp {
 		sort($directory);
 		
 		return $directory;
+	}
+
+	// ------------------------------------------------------------------------
+
+	/**
+	 * Upload data from a variable
+	 *
+	 * @access	private
+	 * @param	string
+	 * @param	string
+	 * @return	bool
+	 */
+	function upload_from_var($data_to_send, $rempath)
+	{
+		
+		if ( ! $this->_is_conn())
+		{
+			return FALSE;
+		}
+		
+		$sftp = $this->conn_sftp;
+		
+		$stream = @fopen("ssh2.sftp://$sftp$rempath", 'w');
+		
+		if ($stream === FALSE)
+		{
+			if ($this->debug == TRUE)
+			{
+				$this->_error('sftp_unable_to_upload');
+			}
+			return FALSE;
+		}
+		
+		if (@fwrite($stream, $data_to_send) === false)
+		{
+			if ($this->debug == TRUE)
+			{
+				$this->_error('sftp_unable_to_send_data');
+			}
+			return FALSE;
+		}
+		
+		@fclose($stream);
+		
+		return TRUE;
 	}
 
 	// ------------------------------------------------------------------------
