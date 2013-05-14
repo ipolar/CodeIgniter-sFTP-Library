@@ -3,6 +3,14 @@
 A CodeIgniter sFTP Library - Allows communication to a sFTP server via the CodeIgniter framework.
 
 
+## Contributors
+
+Many thanks to Carlo Giordano [kjj1](https://github.com/kjj1 "kjj1") on GitHub for adding public key functionality!
+
+## Todo
+A more up to date guide to installing ssh2
+
+
 ## Requirements
 
 1. PHP 5+

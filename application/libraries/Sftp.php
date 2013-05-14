@@ -30,7 +30,9 @@ class Sftp {
 	var $port		= 22;
 	var $debug		= FALSE;
 	var $conn_sftp	= FALSE;
-	
+    var $login_via_key = FALSE;
+    var $public_key_url = '';
+    var $private_key_url = '';
 	
 	/**
 	 * Constructor - Sets Preferences
@@ -123,7 +125,19 @@ class Sftp {
 	 */
 	function _login()
 	{
-		return @ssh2_auth_password($this->conn, $this->username, $this->password);
+        if ($this->login_via_key) {
+            if (@ssh2_auth_pubkey_file($this->conn, $this->username, $this->public_key_url, $this->private_key_url, $this->password)) {
+                return true;
+            } else {
+				if ($this->debug == TRUE)
+				{
+					$this->_error('sftp_unable_to_connect_with_public_key');
+				}
+                return false;
+            }
+        } else {
+            return @ssh2_auth_password($this->conn, $this->username, $this->password);
+        }
 	}
 
 	// --------------------------------------------------------------------

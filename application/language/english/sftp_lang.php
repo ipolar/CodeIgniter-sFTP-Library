@@ -10,6 +10,7 @@ $lang['sftp_no_source_file']					= "Unable to locate the source file for upload.
 $lang['sftp_unable_to_rename']					= "Unable to rename the file.";
 $lang['sftp_unable_to_delete']					= "Unable to delete the file.";
 $lang['sftp_unable_to_move']					= "Unable to move the file.  Please make sure the destination directory exists.";
+$lang['sftp_unable_to_connect_with_public_key']	= "Unable to connect with the public key you've provided.";
 
 /* End of file sftp_lang.php */
 /* Location: ./system/language/english/sftp_lang.php */
