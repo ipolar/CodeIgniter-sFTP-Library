@@ -1,14 +1,15 @@
 <?php
 
-class Sftp_test extends Controller {
+class Sftp_test extends CI_Controller {
 
-	function Sftp_test()	{
-		parent::Controller();
-		
-		// Load libraries
-		$this->load->library('sftp');
+    function __construct()
+    {
+        parent::__construct();
 
-	}
+        // Load libraries
+        $this->load->library('sftp');
+
+    }
 
 
 //----------------------------------------------------------------------------------->
