@@ -30,9 +30,11 @@ class Sftp {
 	var $port		= 22;
 	var $debug		= FALSE;
 	var $conn_sftp	= FALSE;
-    var $login_via_key = FALSE;
-    var $public_key_url = '';
-    var $private_key_url = '';
+        var $login_via_key = FALSE;
+        var $public_key_url = '';
+        var $private_key_url = '';
+        
+        var $buffer_size = 1024;
 	
 	/**
 	 * Constructor - Sets Preferences
@@ -305,7 +307,13 @@ class Sftp {
 			return FALSE;
 		}
 		
-		$contents = @fread($stream, filesize("ssh2.sftp://$sftp$rempath"));
+		$contents = null;
+		
+		while (!feof($stream)) 
+		{
+                        $contents .= @fread($stream, $this->buffer_size)
+                }
+		
 		$result = file_put_contents($locpath, $contents);
 		@fclose($stream);
 		return $result;
