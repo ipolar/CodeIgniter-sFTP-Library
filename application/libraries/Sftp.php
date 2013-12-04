@@ -311,7 +311,7 @@ class Sftp {
 		
 		while (!feof($stream)) 
 		{
-                        $contents .= @fread($stream, $this->buffer_size)
+                        $contents .= @fread($stream, $this->buffer_size);
                 }
 		
 		$result = file_put_contents($locpath, $contents);
