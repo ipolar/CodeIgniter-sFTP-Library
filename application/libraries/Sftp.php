@@ -318,6 +318,44 @@ class Sftp {
 		@fclose($stream);
 		return $result;
 	}
+	
+	// --------------------------------------------------------------------
+
+	/**
+	 * Force Download a remote file in a browser
+	 *
+	 * @access	public
+	 * @param	string
+	 * @return	bool
+	 */	
+	
+	function force_download($rempath)
+	{
+		if ( ! $this->_is_conn())
+		{
+			return FALSE;
+		}
+		
+		$sftp = $this->conn_sftp;
+		$stream_path = "ssh2.sftp://$sftp$rempath";
+		
+		$stream = @fopen($stream_path, 'r');
+		
+		if ($stream === FALSE)
+		{
+			if ($this->debug == TRUE)
+			{
+				$this->_error('sftp_unable_to_download');
+			}
+			return FALSE;
+		}
+		
+		header('Content-Type: application/octet-stream');
+		header("Content-Transfer-Encoding: Binary"); 
+		header("Content-disposition: attachment; filename=\"".basename($stream_path)."\""); 
+		header('Content-Length: ' . filesize($stream_path));
+		readfile($stream_path);
+	}
 
 	// --------------------------------------------------------------------
 
